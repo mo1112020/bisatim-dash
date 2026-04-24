@@ -1,0 +1,70 @@
+@import "tailwindcss";
+
+:root {
+  --dash-bg: #f5f4f2;
+  --dash-surface: #ffffff;
+  --dash-border: rgba(0,0,0,0.08);
+  --dash-black: #1a1a18;
+  --dash-muted: rgba(26,26,24,0.45);
+  --dash-accent: #1a1a18;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--dash-bg);
+  color: var(--dash-black);
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: opacity 0.15s;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+}
+
+.btn:hover { opacity: 0.75; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btn-primary { background: var(--dash-black); color: #fff; }
+.btn-secondary { background: transparent; color: var(--dash-black); border: 1px solid var(--dash-border); }
+.btn-danger { background: #dc2626; color: #fff; }
+
+input, textarea, select {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid var(--dash-border);
+  background: #fff;
+  font-size: 13px;
+  color: var(--dash-black);
+  outline: none;
+  transition: border-color 0.15s;
+  font-family: inherit;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--dash-black);
+}
+
+textarea { min-height: 100px; resize: vertical; }
+
+label {
+  display: block;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dash-muted);
+  margin-bottom: 5px;
+}

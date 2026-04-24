@@ -1,0 +1,32 @@
+import Link from 'next/link';
+import { ChevronRight } from 'lucide-react';
+
+interface Props {
+  title: string;
+  breadcrumb?: { label: string; href: string }[];
+  action?: React.ReactNode;
+}
+
+export function PageHeader({ title, breadcrumb, action }: Props) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 28 }}>
+      <div>
+        {breadcrumb && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginBottom: 6 }}>
+            {breadcrumb.map((b, i) => (
+              <span key={b.href} style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                {i > 0 && <ChevronRight size={10} style={{ color: 'var(--dash-muted)' }} />}
+                <Link href={b.href} style={{
+                  fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.1em',
+                  color: 'var(--dash-muted)', textDecoration: 'none',
+                }}>{b.label}</Link>
+              </span>
+            ))}
+          </div>
+        )}
+        <h1 style={{ fontSize: 20, fontWeight: 300, letterSpacing: '-0.02em', color: 'var(--dash-black)' }}>{title}</h1>
+      </div>
+      {action && <div>{action}</div>}
+    </div>
+  );
+}
