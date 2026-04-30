@@ -5,5 +5,11 @@ const config: NextConfig = {
       { protocol: 'https', hostname: '**' },
     ],
   },
+  serverExternalPackages: ['sharp'],
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '50mb',
+    },
+  },
 };
 export default config;

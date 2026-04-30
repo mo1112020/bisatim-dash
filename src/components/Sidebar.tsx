@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
   LayoutDashboard, Package, FileText, ShoppingBag,
-  Star, Tag, Settings, Image, LogOut, ChevronRight,
+  Star, Tag, Settings, Image, Cloud, LogOut, ChevronRight,
 } from 'lucide-react';
 import { getBrowserClient } from '@/lib/supabase-browser';
 
@@ -16,6 +16,7 @@ const NAV = [
   { href: '/dashboard/categories', label: 'Categories', icon: Tag },
   { href: '/dashboard/site-content', label: 'Site Content', icon: Settings },
   { href: '/dashboard/site-images', label: 'Site Images', icon: Image },
+  { href: '/dashboard/cdn', label: 'CDN Manager', icon: Cloud },
 ];
 
 export function Sidebar() {
