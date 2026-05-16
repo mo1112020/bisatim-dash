@@ -38,8 +38,8 @@ export function Sidebar() {
       borderRight: '1px solid rgba(255,255,255,0.06)',
     }}>
       <div style={{ padding: '20px 24px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-        <p style={{ color: '#fff', fontWeight: 300, fontSize: 15, letterSpacing: '-0.01em' }}>Bisatim</p>
-        <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.2em', marginTop: 3 }}>Dashboard</p>
+        <p style={{ color: '#fff', fontWeight: 300, fontSize: 15, letterSpacing: '-0.01em' }}>Bisāṭim</p>
+        <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.2em', marginTop: 3 }}>Vintage Archive</p>
       </div>
       <nav style={{ flex: 1, paddingTop: 8, overflowY: 'auto' }}>
         {NAV.map(({ href, label, icon: Icon, exact }) => {

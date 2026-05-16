@@ -1,3 +1,5 @@
+import { MediaPicker } from './MediaPicker';
+
 const FIELD: React.CSSProperties = { marginBottom: 0 };
 
 export function ProductFields({ defaults }: { defaults?: Record<string, unknown> }) {
@@ -8,7 +10,7 @@ export function ProductFields({ defaults }: { defaults?: Record<string, unknown>
         <div>
           <label>Category</label>
           <select name="category" defaultValue={defaults?.category as string}>
-            {['Handmade', 'Vintage', 'Machine', 'Kilim', 'Modern'].map(c =>
+            {['Vintage'].map(c =>
               <option key={c} value={c}>{c}</option>)}
           </select>
         </div>
@@ -26,8 +28,8 @@ export function ProductFields({ defaults }: { defaults?: Record<string, unknown>
       </div>
       <div><label>Description</label><textarea name="description" defaultValue={defaults?.description as string} required /></div>
       <div>
-        <label>Images (one URL per line)</label>
-        <textarea name="images" defaultValue={Array.isArray(defaults?.images) ? (defaults.images as string[]).join('\n') : ''} placeholder="https://..." />
+        <label>Images</label>
+        <MediaPicker defaultUrls={Array.isArray(defaults?.images) ? (defaults.images as string[]) : []} />
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
         <div><label>Dimensions</label><input name="dimensions" defaultValue={defaults?.dimensions as string} placeholder="200×300 cm" /></div>
