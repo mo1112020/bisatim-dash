@@ -22,9 +22,8 @@ export function ProductFields({ defaults }: { defaults?: Record<string, unknown>
           </select>
         </div>
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-        <div><label>Price ($)</label><input name="price" type="number" step="0.01" defaultValue={defaults?.price as number} required /></div>
-        <div><label>Sale Price ($) — optional</label><input name="sale_price" type="number" step="0.01" defaultValue={(defaults?.sale_price as number) ?? ''} /></div>
+      <div style={{ maxWidth: 200 }}>
+        <label>Price ($)</label><input name="price" type="number" step="0.01" defaultValue={defaults?.price as number} required />
       </div>
       <div><label>Description</label><textarea name="description" defaultValue={defaults?.description as string} required /></div>
       <div>

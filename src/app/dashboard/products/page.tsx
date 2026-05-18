@@ -38,11 +38,7 @@ export default async function ProductsPage() {
               <tr key={p.id}>
                 <td style={TD}><span style={{ fontWeight: 500 }}>{p.name}</span></td>
                 <td style={{ ...TD, color: 'var(--dash-muted)', fontSize: 13 }}>{p.category}</td>
-                <td style={TD}>
-                  {p.sale_price
-                    ? <><s style={{ color: 'var(--dash-muted)', marginRight: 8 }}>${p.price}</s><span style={{ color: '#dc2626' }}>${p.sale_price}</span></>
-                    : `$${p.price}`}
-                </td>
+                <td style={TD}>${p.price}</td>
                 <td style={{ ...TD, fontSize: 13 }}>{p.stock}</td>
                 <td style={TD}>
                   <Link href={`/dashboard/products/${p.id}`} className="btn btn-secondary" style={{ padding: '5px 12px' }}>

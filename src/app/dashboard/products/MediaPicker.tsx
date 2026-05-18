@@ -84,10 +84,10 @@ export function MediaPicker({ defaultUrls }: { defaultUrls?: string[] }) {
                 onClick={() => toggle(f.url)}
                 title={f.name}
                 style={{
-                  position: 'relative', width: '100%', paddingBottom: '100%',
+                  position: 'relative', width: '100%',
                   border: active ? '2px solid var(--dash-black)' : '2px solid transparent',
                   borderRadius: 4, overflow: 'hidden', cursor: 'pointer',
-                  background: '#f3f4f6', padding: 0,
+                  background: '#f3f4f6', padding: 0, paddingBottom: '100%',
                 }}
               >
                 <Image src={f.url} alt={f.name} fill style={{ objectFit: 'cover' }} unoptimized />
