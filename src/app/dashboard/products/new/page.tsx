@@ -24,9 +24,9 @@ export default function NewProductPage() {
   }
 
   return (
-    <div style={{ maxWidth: 660 }}>
-      <PageHeader title="New Product" breadcrumb={[{ label: 'Products', href: '/dashboard/products' }]} />
-      <form onSubmit={handleSubmit} style={{ padding: 28, display: 'flex', flexDirection: 'column', gap: 16, background: 'var(--dash-surface)', border: '1px solid var(--dash-border)' }}>
+    <div>
+      <PageHeader title="New Product" subtitle="Add a new product to the catalog" breadcrumb={[{ label: 'Products', href: '/dashboard/products' }]} />
+      <form onSubmit={handleSubmit} className="dash-form-panel" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
         <ProductFields />
         {error && <p style={{ fontSize: 12, color: '#dc2626' }}>{error}</p>}
         <div style={{ display: 'flex', gap: 12, paddingTop: 8 }}>

@@ -16,11 +16,14 @@ export default async function SiteContentPage() {
   for (const row of data ?? []) stored[row.key] = row.value;
 
   return (
-    <div style={{ maxWidth: 480 }}>
-      <PageHeader title="Site Content" />
-      <form action={saveSiteSettings} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-        <section style={{ padding: 24, background: 'var(--dash-surface)', border: '1px solid var(--dash-border)' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+    <div>
+      <PageHeader
+        title="Site Content"
+        subtitle="Social links and contact information"
+      />
+      <form action={saveSiteSettings} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <section className="dash-form-panel">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 14 }}>
             {SETTINGS.map(({ key, label, type, value }) => (
               <div key={key}>
                 <label>{label}</label>

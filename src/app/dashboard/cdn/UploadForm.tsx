@@ -1,6 +1,7 @@
 'use client';
 import { useRef, useState, useTransition } from 'react';
 import Image from 'next/image';
+import { PageHeader } from '@/components/PageHeader';
 import { deleteImage } from './actions';
 import type { StorageFile } from './types';
 
@@ -98,23 +99,20 @@ export function UploadForm({ files }: { files: StorageFile[] }) {
 
   return (
     <div>
-      {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 20 }}>
-        <div>
-          <h1 style={{ fontSize: 22, fontWeight: 600, color: 'var(--dash-black)' }}>CDN Manager</h1>
-          <p style={{ fontSize: 12, color: 'var(--dash-muted)', marginTop: 4 }}>
-            {realFiles.length} file{realFiles.length !== 1 ? 's' : ''} · {fmt(totalSize)}
-          </p>
-        </div>
-        <button
-          className="btn btn-primary"
-          type="button"
-          disabled={isPending}
-          onClick={() => fileRef.current?.click()}
-        >
-          {isPending ? 'Uploading…' : '↑ Upload images'}
-        </button>
-      </div>
+      <PageHeader
+        title="CDN Manager"
+        subtitle={`${realFiles.length} file${realFiles.length !== 1 ? 's' : ''} · ${fmt(totalSize)}`}
+        action={
+          <button
+            className="btn btn-primary"
+            type="button"
+            disabled={isPending}
+            onClick={() => fileRef.current?.click()}
+          >
+            {isPending ? 'Uploading…' : '↑ Upload images'}
+          </button>
+        }
+      />
 
       {/* Hidden file input */}
       <input
@@ -175,10 +173,8 @@ export function UploadForm({ files }: { files: StorageFile[] }) {
         {visible.map((file, i) => {
           const isTemp = file.path.startsWith('__temp__');
           return (
-            <div key={file.path} style={{
-              background: 'var(--dash-surface)',
-              border: '1px solid var(--dash-border)',
-              borderRadius: 6, overflow: 'hidden',
+            <div key={file.path} className="dash-panel" style={{
+              overflow: 'hidden',
               opacity: isTemp ? 0.6 : 1,
               transition: 'opacity 0.2s',
             }}>
@@ -186,10 +182,8 @@ export function UploadForm({ files }: { files: StorageFile[] }) {
                 <Image src={file.url} alt={file.name} fill style={{ objectFit: 'cover' }} unoptimized priority={i === 0} />
                 {/* Usage badge */}
                 {!isTemp && (
-                  <div style={{
+                  <div className="dash-badge" style={{
                     position: 'absolute', top: 6, left: 6,
-                    fontSize: 9, fontWeight: 600, letterSpacing: '0.04em',
-                    padding: '2px 6px', borderRadius: 3,
                     background: file.inUse ? 'rgba(16,185,129,0.9)' : 'rgba(0,0,0,0.45)',
                     color: '#fff',
                   }}>
@@ -197,10 +191,8 @@ export function UploadForm({ files }: { files: StorageFile[] }) {
                   </div>
                 )}
                 {isTemp && (
-                  <div style={{
+                  <div className="dash-badge" style={{
                     position: 'absolute', top: 6, left: 6,
-                    fontSize: 9, fontWeight: 600, letterSpacing: '0.04em',
-                    padding: '2px 6px', borderRadius: 3,
                     background: 'rgba(99,102,241,0.9)', color: '#fff',
                   }}>
                     UPLOADING

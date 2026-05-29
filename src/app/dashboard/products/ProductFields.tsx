@@ -22,7 +22,7 @@ export function ProductFields({ defaults }: { defaults?: Record<string, unknown>
           </select>
         </div>
       </div>
-      <div style={{ maxWidth: 200 }}>
+      <div>
         <label>Price ($)</label><input name="price" type="number" step="0.01" defaultValue={defaults?.price as number} required />
       </div>
       <div><label>Description</label><textarea name="description" defaultValue={defaults?.description as string} required /></div>

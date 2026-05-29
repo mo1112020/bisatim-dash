@@ -27,13 +27,44 @@ export interface BlogPost {
   created_at: string;
 }
 
+export interface OrderItem {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  rooms?: string[];
+  stock?: number;
+  images?: string[];
+  origin?: string;
+  reviews?: unknown;
+  category?: string;
+  material?: string;
+  dimensions?: string;
+  description?: string;
+  sizeCategory?: string;
+}
+
+export interface OrderLocation {
+  name?: string;
+  phone?: string;
+  email?: string;
+  city?: string;
+  address?: string;
+  street?: string;
+  district?: string;
+  zip?: string;
+  country?: string;
+  notes?: string;
+  [key: string]: string | undefined;
+}
+
 export interface Order {
   id: string;
   status: string;
   date: string;
-  items: string[];
+  items: (OrderItem | string)[];
   estimated_delivery: string;
-  location: string;
+  location: OrderLocation | string | null;
   created_at: string;
 }
 

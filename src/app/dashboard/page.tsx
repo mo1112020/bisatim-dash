@@ -28,19 +28,18 @@ export default async function OverviewPage() {
 
   return (
     <div>
-      <PageHeader title="Overview" />
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
+      <PageHeader
+        title="Overview"
+        subtitle={`${stats.products + stats.blog + stats.orders + stats.reviews} total records across all sections`}
+      />
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 12 }}>
         {cards.map(({ label, value, icon: Icon, href }) => (
-          <a key={label} href={href} style={{
-            display: 'block', padding: 24, textDecoration: 'none',
-            background: 'var(--dash-surface)', border: '1px solid var(--dash-border)',
-            transition: 'box-shadow 0.15s',
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-              <p style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.15em', color: 'var(--dash-muted)' }}>{label}</p>
-              <Icon size={15} style={{ color: 'var(--dash-muted)' }} />
+          <a key={label} href={href} className="dash-card">
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+              <p style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.12em', color: 'var(--dash-muted)' }}>{label}</p>
+              <Icon size={14} style={{ color: 'var(--dash-muted)' }} />
             </div>
-            <p style={{ fontSize: 32, fontWeight: 300, color: 'var(--dash-black)' }}>{value}</p>
+            <p style={{ fontSize: 28, fontWeight: 600, color: 'var(--dash-black)' }}>{value}</p>
           </a>
         ))}
       </div>

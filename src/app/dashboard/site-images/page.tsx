@@ -16,50 +16,37 @@ const SECTIONS: Section[] = [
       { key: 'lifestyle_3_hero', label: 'Slide 3', hint: 'From the Field',                             fallback: '' },
     ],
   },
-  {
-    title: 'Origin Grid',
-    page: 'Home page — 3-panel full-bleed grid below the hero (Anatolia / Persia / Caucasus)',
-    slots: [
-      { key: 'lifestyle_1_hero', label: 'Anatolia',  hint: 'Left panel',   fallback: '' },
-      { key: 'lifestyle_2_hero', label: 'Persia',    hint: 'Centre panel · also Full-Bleed Editorial below products', fallback: '' },
-      { key: 'lifestyle_4_hero', label: 'Caucasus',  hint: 'Right panel',  fallback: '' },
-    ],
-  },
 ];
 
 export default async function SiteImagesPage() {
   const { data } = await adminClient.from('site_images').select('key, url');
   const stored: Record<string, string> = {};
   for (const row of data ?? []) stored[row.key] = row.url;
+  const slotCount = SECTIONS.reduce((n, s) => n + s.slots.length, 0);
 
   return (
-    <div style={{ maxWidth: 720 }}>
-      <PageHeader title="Site Images" />
-      <form action={saveSiteImages} style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+    <div>
+      <PageHeader
+        title="Site Images"
+        subtitle={`${slotCount} image slot${slotCount !== 1 ? 's' : ''} across ${SECTIONS.length} sections`}
+      />
+      <form action={saveSiteImages} style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
 
         {SECTIONS.map(section => (
           <div key={section.title}>
-            {/* Section header */}
             <div style={{ marginBottom: 12 }}>
-              <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--dash-black)', letterSpacing: '-0.01em' }}>
-                {section.title}
-              </div>
-              <div style={{ fontSize: 11, color: 'var(--dash-muted)', marginTop: 2 }}>
-                {section.page}
-              </div>
+              <div className="dash-section-title">{section.title}</div>
+              <div className="dash-section-desc">{section.page}</div>
             </div>
 
-            {/* Slots */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {section.slots.map(({ key, label, hint }) => {
                 const url = stored[key] ?? '';
                 return (
-                  <div key={`${section.title}-${key}`} style={{
+                  <div key={`${section.title}-${key}`} className="dash-panel" style={{
                     display: 'flex', gap: 14, alignItems: 'flex-start', padding: 14,
-                    background: 'var(--dash-surface)', border: '1px solid var(--dash-border)',
-                    borderRadius: 4,
                   }}>
-                    <div style={{ position: 'relative', width: 80, height: 54, flexShrink: 0, background: '#f3f4f6', overflow: 'hidden', borderRadius: 3, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ position: 'relative', width: 80, height: 54, flexShrink: 0, background: '#f3f4f6', overflow: 'hidden', borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       {url
                         ? <Image src={url} alt={label} fill style={{ objectFit: 'cover' }} unoptimized />
                         : <span style={{ fontSize: 9, color: '#aaa', textAlign: 'center', padding: '0 4px' }}>No image set</span>
@@ -83,7 +70,7 @@ export default async function SiteImagesPage() {
           </div>
         ))}
 
-        <div style={{ paddingTop: 4, paddingBottom: 32 }}>
+        <div>
           <button type="submit" className="btn btn-primary">Save all images</button>
         </div>
       </form>

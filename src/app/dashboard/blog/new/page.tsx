@@ -24,9 +24,9 @@ export default function NewBlogPage() {
   }
 
   return (
-    <div style={{ maxWidth: 660 }}>
-      <PageHeader title="New Post" breadcrumb={[{ label: 'Blog', href: '/dashboard/blog' }]} />
-      <form onSubmit={handleSubmit} style={{ padding: 28, display: 'flex', flexDirection: 'column', gap: 16, background: 'var(--dash-surface)', border: '1px solid var(--dash-border)' }}>
+    <div>
+      <PageHeader title="New Post" subtitle="Write a new blog article" breadcrumb={[{ label: 'Blog', href: '/dashboard/blog' }]} />
+      <form onSubmit={handleSubmit} className="dash-form-panel" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
         <BlogFields />
         {error && <p style={{ fontSize: 12, color: '#dc2626' }}>{error}</p>}
         <div style={{ display: 'flex', gap: 12, paddingTop: 8 }}>

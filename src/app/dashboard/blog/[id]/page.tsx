@@ -38,16 +38,17 @@ export default function EditBlogPage() {
     router.push('/dashboard/blog');
   }
 
-  if (!post) return <p style={{ padding: 40, color: 'var(--dash-muted)' }}>Loading…</p>;
+  if (!post) return <p style={{ padding: 40, color: 'var(--dash-muted)', fontSize: 13 }}>Loading…</p>;
 
   return (
-    <div style={{ maxWidth: 660 }}>
+    <div>
       <PageHeader
         title="Edit Post"
+        subtitle={post.title}
         breadcrumb={[{ label: 'Blog', href: '/dashboard/blog' }]}
         action={<button onClick={handleDelete} className="btn btn-danger">Delete</button>}
       />
-      <form onSubmit={handleSubmit} style={{ padding: 28, display: 'flex', flexDirection: 'column', gap: 16, background: 'var(--dash-surface)', border: '1px solid var(--dash-border)' }}>
+      <form onSubmit={handleSubmit} className="dash-form-panel" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
         <BlogFields defaults={post as unknown as Record<string, unknown>} />
         {error && <p style={{ fontSize: 12, color: '#dc2626' }}>{error}</p>}
         <div style={{ display: 'flex', gap: 12, paddingTop: 8 }}>

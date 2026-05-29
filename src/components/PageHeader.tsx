@@ -3,13 +3,14 @@ import { ChevronRight } from 'lucide-react';
 
 interface Props {
   title: string;
+  subtitle?: string;
   breadcrumb?: { label: string; href: string }[];
   action?: React.ReactNode;
 }
 
-export function PageHeader({ title, breadcrumb, action }: Props) {
+export function PageHeader({ title, subtitle, breadcrumb, action }: Props) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 28 }}>
+    <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 20, gap: 16 }}>
       <div>
         {breadcrumb && (
           <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginBottom: 6 }}>
@@ -24,9 +25,12 @@ export function PageHeader({ title, breadcrumb, action }: Props) {
             ))}
           </div>
         )}
-        <h1 style={{ fontSize: 20, fontWeight: 300, letterSpacing: '-0.02em', color: 'var(--dash-black)' }}>{title}</h1>
+        <h1 style={{ fontSize: 22, fontWeight: 600, color: 'var(--dash-black)' }}>{title}</h1>
+        {subtitle && (
+          <p style={{ fontSize: 12, color: 'var(--dash-muted)', marginTop: 4 }}>{subtitle}</p>
+        )}
       </div>
-      {action && <div>{action}</div>}
+      {action && <div style={{ flexShrink: 0 }}>{action}</div>}
     </div>
   );
 }

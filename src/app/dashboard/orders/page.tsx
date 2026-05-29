@@ -1,14 +1,8 @@
 import Link from 'next/link';
 import { adminClient } from '@/lib/supabase-admin';
 import { PageHeader } from '@/components/PageHeader';
-import type { Order } from '@/lib/types';
-
-const TH: React.CSSProperties = {
-  textAlign: 'left', padding: '10px 20px',
-  fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.12em',
-  color: 'var(--dash-muted)', borderBottom: '1px solid var(--dash-border)',
-};
-const TD: React.CSSProperties = { padding: '12px 20px', borderBottom: '1px solid var(--dash-border)' };
+import { DashTable, DashTh, DashTd, DashEmpty } from '@/components/DashTable';
+import type { Order, OrderLocation } from '@/lib/types';
 
 const STATUS_COLOR: Record<string, { bg: string; text: string }> = {
   pending:    { bg: '#fef3c7', text: '#d97706' },
@@ -18,55 +12,57 @@ const STATUS_COLOR: Record<string, { bg: string; text: string }> = {
   cancelled:  { bg: '#fee2e2', text: '#dc2626' },
 };
 
+function formatLocation(location: Order['location']) {
+  if (!location) return '—';
+  if (typeof location === 'string') return location;
+  const loc = location as OrderLocation;
+  return loc.city || loc.address || loc.name || '—';
+}
+
 export default async function OrdersPage() {
   const { data } = await adminClient.from('orders').select('*').order('created_at', { ascending: false });
   const orders: Order[] = data ?? [];
 
   return (
     <div>
-      <PageHeader title="Orders" />
-      <div style={{ background: 'var(--dash-surface)', border: '1px solid var(--dash-border)', overflowX: 'auto' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-          <thead>
-            <tr>
-              <th style={TH}>Order ID</th>
-              <th style={TH}>Date</th>
-              <th style={TH}>Status</th>
-              <th style={TH}>Location</th>
-              <th style={TH}>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {orders.map(o => {
-              const color = STATUS_COLOR[o.status] ?? { bg: '#f3f4f6', text: '#6b7280' };
-              return (
-                <tr key={o.id}>
-                  <td style={{ ...TD, fontFamily: 'monospace', fontSize: 13 }}>{o.id}</td>
-                  <td style={{ ...TD, color: 'var(--dash-muted)', fontSize: 13 }}>{o.date}</td>
-                  <td style={TD}>
-                    <span style={{ fontSize: 10, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', padding: '3px 8px', background: color.bg, color: color.text }}>
-                      {o.status}
-                    </span>
-                  </td>
-                  <td style={{ ...TD, color: 'var(--dash-muted)', fontSize: 13 }}>{o.location}</td>
-                  <td style={TD}>
-                    <Link href={`/dashboard/orders/${o.id}`} className="btn btn-secondary" style={{ padding: '5px 12px' }}>
-                      View
-                    </Link>
-                  </td>
-                </tr>
-              );
-            })}
-            {orders.length === 0 && (
-              <tr>
-                <td colSpan={5} style={{ ...TD, textAlign: 'center', color: 'var(--dash-muted)', padding: '40px 20px' }}>
-                  No orders yet.
-                </td>
+      <PageHeader
+        title="Orders"
+        subtitle={`${orders.length} order${orders.length !== 1 ? 's' : ''}`}
+      />
+      <DashTable>
+        <thead>
+          <tr>
+            <DashTh>Order ID</DashTh>
+            <DashTh>Date</DashTh>
+            <DashTh>Status</DashTh>
+            <DashTh>Location</DashTh>
+            <DashTh>Actions</DashTh>
+          </tr>
+        </thead>
+        <tbody>
+          {orders.map(o => {
+            const color = STATUS_COLOR[o.status] ?? { bg: '#f3f4f6', text: '#6b7280' };
+            return (
+              <tr key={o.id}>
+                <DashTd style={{ fontFamily: 'monospace', fontSize: 12 }}>{o.id.slice(0, 8)}…</DashTd>
+                <DashTd style={{ color: 'var(--dash-muted)' }}>{o.date}</DashTd>
+                <DashTd>
+                  <span className="dash-badge" style={{ background: color.bg, color: color.text, fontSize: 10, padding: '3px 8px' }}>
+                    {o.status}
+                  </span>
+                </DashTd>
+                <DashTd style={{ color: 'var(--dash-muted)' }}>{formatLocation(o.location)}</DashTd>
+                <DashTd>
+                  <Link href={`/dashboard/orders/${o.id}`} className="btn btn-secondary" style={{ padding: '5px 12px', fontSize: 10 }}>
+                    View
+                  </Link>
+                </DashTd>
               </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+            );
+          })}
+          {orders.length === 0 && <DashEmpty colSpan={5}>No orders yet.</DashEmpty>}
+        </tbody>
+      </DashTable>
     </div>
   );
 }

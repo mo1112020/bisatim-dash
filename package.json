@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "next dev --port 3001",
     "build": "next build",
-    "start": "next start --port 3001"
+    "start": "next start --port 3001",
+    "check-secrets": "bash scripts/check-secrets.sh",
+    "prepush": "npm run check-secrets"
   },
   "dependencies": {
     "@supabase/ssr": "^0.6.1",
