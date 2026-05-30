@@ -1,13 +1,12 @@
 import Link from 'next/link';
-import { adminClient } from '@/lib/supabase-admin';
+import { getProducts } from '@/lib/queries';
 import { PageHeader } from '@/components/PageHeader';
 import { DashTable, DashTh, DashTd, DashEmpty } from '@/components/DashTable';
 import { Plus, Pencil } from 'lucide-react';
 import type { Product } from '@/lib/types';
 
 export default async function ProductsPage() {
-  const { data } = await adminClient.from('products').select('*').order('created_at', { ascending: false });
-  const products: Product[] = data ?? [];
+  const products = await getProducts();
 
   return (
     <div>
@@ -24,7 +23,7 @@ export default async function ProductsPage() {
         <thead>
           <tr>
             <DashTh>Name</DashTh>
-            <DashTh>Category</DashTh>
+            <DashTh>Categories</DashTh>
             <DashTh>Price</DashTh>
             <DashTh>Stock</DashTh>
             <DashTh>Actions</DashTh>
@@ -34,7 +33,11 @@ export default async function ProductsPage() {
           {products.map(p => (
             <tr key={p.id}>
               <DashTd style={{ fontWeight: 500 }}>{p.name}</DashTd>
-              <DashTd style={{ color: 'var(--dash-muted)' }}>{p.category}</DashTd>
+              <DashTd style={{ color: 'var(--dash-muted)' }}>
+                {Array.isArray(p.categories) && p.categories.length > 0
+                  ? p.categories.join(', ')
+                  : '—'}
+              </DashTd>
               <DashTd>${p.price}</DashTd>
               <DashTd>{p.stock}</DashTd>
               <DashTd>

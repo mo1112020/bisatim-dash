@@ -6,11 +6,8 @@ import { useRouter } from 'next/navigation';
 const ROUTES = [
   '/dashboard',
   '/dashboard/products',
-  '/dashboard/blog',
   '/dashboard/orders',
-  '/dashboard/reviews',
   '/dashboard/categories',
-  '/dashboard/site-content',
   '/dashboard/site-images',
   '/dashboard/cdn',
 ];

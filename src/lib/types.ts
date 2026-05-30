@@ -1,29 +1,15 @@
 export interface Product {
   id: string;
   name: string;
-  category: string;
+  categories: string[];
   price: number;
   description: string;
   images: string[];
   dimensions: string;
-  size_category: string;
-  rooms: string[];
+  dimensions_ft: string;
   material: string;
   origin: string;
   stock: number;
-  created_at: string;
-}
-
-export interface BlogPost {
-  id: string;
-  title: string;
-  excerpt: string;
-  content: string;
-  image: string;
-  date: string;
-  author: string;
-  category: string;
-  meta_description: string | null;
   created_at: string;
 }
 
@@ -32,16 +18,15 @@ export interface OrderItem {
   name: string;
   price: number;
   quantity: number;
-  rooms?: string[];
   stock?: number;
   images?: string[];
   origin?: string;
   reviews?: unknown;
   category?: string;
+  categories?: string[];
   material?: string;
   dimensions?: string;
   description?: string;
-  sizeCategory?: string;
 }
 
 export interface OrderLocation {
@@ -68,18 +53,6 @@ export interface Order {
   created_at: string;
 }
 
-export interface Testimonial {
-  id: string;
-  name: string;
-  location: string;
-  title: string;
-  text: string;
-  date: string;
-  rating: number;
-  category: string;
-  created_at: string;
-}
-
 export interface Category {
   id: string;
   name: string;
@@ -88,12 +61,6 @@ export interface Category {
   image_url: string;
   sort_order: number;
   active: boolean;
-}
-
-export interface SiteSetting {
-  key: string;
-  value: string;
-  label?: string;
 }
 
 export interface SiteImage {

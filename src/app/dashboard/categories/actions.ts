@@ -1,6 +1,6 @@
 'use server';
 import { adminClient } from '@/lib/supabase-admin';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 
 export async function createCategory(fd: FormData) {
   const { error } = await adminClient.from('categories').insert({
@@ -12,15 +12,18 @@ export async function createCategory(fd: FormData) {
     active: true,
   });
   if (error) throw new Error(error.message);
+  revalidateTag('categories');
   revalidatePath('/dashboard/categories');
 }
 
 export async function toggleCategory(id: string, active: boolean) {
   await adminClient.from('categories').update({ active }).eq('id', id);
+  revalidateTag('categories');
   revalidatePath('/dashboard/categories');
 }
 
 export async function deleteCategory(id: string) {
   await adminClient.from('categories').delete().eq('id', id);
+  revalidateTag('categories');
   revalidatePath('/dashboard/categories');
 }

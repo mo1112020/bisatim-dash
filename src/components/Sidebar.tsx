@@ -1,25 +1,25 @@
+'use client';
+
 import Link from 'next/link';
-import { headers } from 'next/headers';
+import { usePathname, useRouter } from 'next/navigation';
 import {
-  LayoutDashboard, Package, FileText, ShoppingBag,
-  Star, Tag, Settings, Image, Cloud, LogOut, ChevronRight,
+  LayoutDashboard, Package, ShoppingBag,
+  Tag, Image, Cloud, ChevronRight,
 } from 'lucide-react';
-import { signOut } from '@/app/auth/actions';
+import { SignOutButton } from '@/components/SignOutButton';
 
 const NAV = [
   { href: '/dashboard', label: 'Overview', icon: LayoutDashboard, exact: true },
   { href: '/dashboard/products', label: 'Products', icon: Package },
-  { href: '/dashboard/blog', label: 'Blog', icon: FileText },
   { href: '/dashboard/orders', label: 'Orders', icon: ShoppingBag },
-  { href: '/dashboard/reviews', label: 'Reviews', icon: Star },
   { href: '/dashboard/categories', label: 'Categories', icon: Tag },
-  { href: '/dashboard/site-content', label: 'Site Content', icon: Settings },
   { href: '/dashboard/site-images', label: 'Site Images', icon: Image },
   { href: '/dashboard/cdn', label: 'CDN Manager', icon: Cloud },
 ];
 
-export async function Sidebar() {
-  const pathname = (await headers()).get('x-pathname') ?? '/dashboard';
+export function Sidebar() {
+  const pathname = usePathname() ?? '/dashboard';
+  const router = useRouter();
 
   return (
     <aside style={{
@@ -36,12 +36,18 @@ export async function Sidebar() {
         {NAV.map(({ href, label, icon: Icon, exact }) => {
           const active = exact ? pathname === href : pathname.startsWith(href);
           return (
-            <Link key={href} href={href} prefetch={true} style={{
-              display: 'flex', alignItems: 'center', gap: 10, padding: '10px 24px',
-              fontSize: 13, textDecoration: 'none', transition: 'color 0.15s',
-              color: active ? '#fff' : 'rgba(255,255,255,0.42)',
-              background: active ? 'rgba(255,255,255,0.06)' : 'transparent',
-            }}>
+            <Link
+              key={href}
+              href={href}
+              prefetch
+              onMouseEnter={() => router.prefetch(href)}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 10, padding: '10px 24px',
+                fontSize: 13, textDecoration: 'none',
+                color: active ? '#fff' : 'rgba(255,255,255,0.42)',
+                background: active ? 'rgba(255,255,255,0.06)' : 'transparent',
+              }}
+            >
               <Icon size={14} />
               <span style={{ flex: 1 }}>{label}</span>
               {active && <ChevronRight size={11} style={{ opacity: 0.4 }} />}
@@ -49,17 +55,7 @@ export async function Sidebar() {
           );
         })}
       </nav>
-      <form action={signOut}>
-        <button type="submit" style={{
-          display: 'flex', alignItems: 'center', gap: 10, padding: '14px 24px',
-          fontSize: 13, color: 'rgba(255,255,255,0.32)',
-          background: 'none', border: 'none', borderTop: '1px solid rgba(255,255,255,0.06)',
-          cursor: 'pointer', width: '100%', textAlign: 'left',
-        }}>
-          <LogOut size={13} />
-          Sign out
-        </button>
-      </form>
+      <SignOutButton />
     </aside>
   );
 }

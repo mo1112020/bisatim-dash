@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { adminClient } from '@/lib/supabase-admin';
+import { getOrders } from '@/lib/queries';
 import { PageHeader } from '@/components/PageHeader';
 import { DashTable, DashTh, DashTd, DashEmpty } from '@/components/DashTable';
 import type { Order, OrderLocation } from '@/lib/types';
@@ -20,8 +20,7 @@ function formatLocation(location: Order['location']) {
 }
 
 export default async function OrdersPage() {
-  const { data } = await adminClient.from('orders').select('*').order('created_at', { ascending: false });
-  const orders: Order[] = data ?? [];
+  const orders = await getOrders();
 
   return (
     <div>

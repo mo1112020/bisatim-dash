@@ -1,4 +1,4 @@
-import { adminClient } from '@/lib/supabase-admin';
+import { getCategories } from '@/lib/queries';
 import { PageHeader } from '@/components/PageHeader';
 import { DashTable, DashTh, DashTd, DashEmpty } from '@/components/DashTable';
 import { createCategory, deleteCategory, toggleCategory } from './actions';
@@ -6,8 +6,7 @@ import { DeleteButton } from '@/components/DeleteButton';
 import type { Category } from '@/lib/types';
 
 export default async function CategoriesPage() {
-  const { data } = await adminClient.from('categories').select('*').order('sort_order');
-  const categories: Category[] = data ?? [];
+  const categories = await getCategories();
 
   return (
     <div>

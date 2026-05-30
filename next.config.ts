@@ -9,8 +9,8 @@ const config: NextConfig = {
   serverExternalPackages: ['sharp'],
   experimental: {
     staleTimes: {
-      dynamic: 300,
-      static: 300,
+      dynamic: 600,
+      static: 600,
     },
     serverActions: {
       bodySizeLimit: '50mb',
