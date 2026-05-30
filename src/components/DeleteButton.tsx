@@ -4,18 +4,19 @@ import { Trash2 } from 'lucide-react';
 interface Props {
   action: () => Promise<void>;
   confirm?: string;
+  label?: string;
 }
 
-export function DeleteButton({ action, confirm: msg = 'Delete? This cannot be undone.' }: Props) {
+export function DeleteButton({ action, confirm: msg = 'Delete? This cannot be undone.', label }: Props) {
   return (
     <form action={action}>
       <button
         type="submit"
-        className="btn btn-danger"
-        style={{ padding: '5px 10px' }}
+        className={label ? 'btn btn-danger' : 'btn btn-danger'}
+        style={label ? undefined : { padding: '5px 10px' }}
         onClick={e => { if (!window.confirm(msg)) e.preventDefault(); }}
       >
-        <Trash2 size={12} />
+        {label ?? <Trash2 size={12} />}
       </button>
     </form>
   );

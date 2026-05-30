@@ -1,20 +1,10 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
+import type { MediaFile } from '@/lib/media-files';
 
-type MediaFile = { name: string; url: string };
-
-export function MediaPicker({ defaultUrls }: { defaultUrls?: string[] }) {
-  const [files, setFiles] = useState<MediaFile[]>([]);
+export function MediaPicker({ files, defaultUrls }: { files: MediaFile[]; defaultUrls?: string[] }) {
   const [selected, setSelected] = useState<string[]>(defaultUrls ?? []);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetch('/api/cdn/list')
-      .then(r => r.json())
-      .then((data: MediaFile[]) => { setFiles(data); setLoading(false); })
-      .catch(() => setLoading(false));
-  }, []);
 
   function toggle(url: string) {
     setSelected(prev =>
@@ -33,10 +23,8 @@ export function MediaPicker({ defaultUrls }: { defaultUrls?: string[] }) {
 
   return (
     <div>
-      {/* Hidden field that actions.ts reads */}
       <input type="hidden" name="images" value={selected.join('\n')} />
 
-      {/* Selected images — ordered list */}
       {selected.length > 0 && (
         <div style={{ marginBottom: 12 }}>
           <div style={{ fontSize: 11, color: 'var(--dash-muted)', marginBottom: 6 }}>
@@ -69,10 +57,9 @@ export function MediaPicker({ defaultUrls }: { defaultUrls?: string[] }) {
         </div>
       )}
 
-      {/* Gallery grid */}
       <div style={{ border: '1px solid var(--dash-border)', borderRadius: 4, padding: 12, background: 'var(--dash-surface)' }}>
         <div style={{ fontSize: 11, color: 'var(--dash-muted)', marginBottom: 10 }}>
-          {loading ? 'Loading media library…' : `${files.length} images in CDN — click to select`}
+          {files.length} images in CDN — click to select
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(72px, 1fr))', gap: 6, maxHeight: 320, overflowY: 'auto' }}>
           {files.map(f => {
@@ -99,7 +86,7 @@ export function MediaPicker({ defaultUrls }: { defaultUrls?: string[] }) {
               </button>
             );
           })}
-          {!loading && files.length === 0 && (
+          {files.length === 0 && (
             <div style={{ gridColumn: '1/-1', fontSize: 12, color: 'var(--dash-muted)' }}>
               No images in CDN yet. Upload images via CDN Manager first.
             </div>

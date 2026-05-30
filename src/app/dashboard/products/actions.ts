@@ -1,6 +1,7 @@
 'use server';
 import { adminClient } from '@/lib/supabase-admin';
 import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 
 export async function createProduct(fd: FormData) {
   const images = (fd.get('images') as string).split('\n').map(s => s.trim()).filter(Boolean);
@@ -18,8 +19,9 @@ export async function createProduct(fd: FormData) {
     origin: fd.get('origin'),
     stock: Number(fd.get('stock')),
   });
-  if (error) throw new Error(error.message);
+  if (error) redirect(`/dashboard/products/new?error=${encodeURIComponent(error.message)}`);
   revalidatePath('/dashboard/products');
+  redirect('/dashboard/products');
 }
 
 export async function updateProduct(id: string, fd: FormData) {
@@ -38,11 +40,13 @@ export async function updateProduct(id: string, fd: FormData) {
     origin: fd.get('origin'),
     stock: Number(fd.get('stock')),
   }).eq('id', id);
-  if (error) throw new Error(error.message);
+  if (error) redirect(`/dashboard/products/${id}?error=${encodeURIComponent(error.message)}`);
   revalidatePath('/dashboard/products');
+  redirect('/dashboard/products');
 }
 
 export async function deleteProduct(id: string) {
   await adminClient.from('products').delete().eq('id', id);
   revalidatePath('/dashboard/products');
+  redirect('/dashboard/products');
 }

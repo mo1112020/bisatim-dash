@@ -1,8 +1,15 @@
 import { MediaPicker } from './MediaPicker';
+import type { MediaFile } from '@/lib/media-files';
 
 const FIELD: React.CSSProperties = { marginBottom: 0 };
 
-export function ProductFields({ defaults }: { defaults?: Record<string, unknown> }) {
+export function ProductFields({
+  defaults,
+  mediaFiles,
+}: {
+  defaults?: Record<string, unknown>;
+  mediaFiles: MediaFile[];
+}) {
   return (
     <>
       <div style={FIELD}><label>Name</label><input name="name" defaultValue={defaults?.name as string} required /></div>
@@ -28,7 +35,7 @@ export function ProductFields({ defaults }: { defaults?: Record<string, unknown>
       <div><label>Description</label><textarea name="description" defaultValue={defaults?.description as string} required /></div>
       <div>
         <label>Images</label>
-        <MediaPicker defaultUrls={Array.isArray(defaults?.images) ? (defaults.images as string[]) : []} />
+        <MediaPicker files={mediaFiles} defaultUrls={Array.isArray(defaults?.images) ? (defaults.images as string[]) : []} />
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
         <div><label>Dimensions</label><input name="dimensions" defaultValue={defaults?.dimensions as string} placeholder="200×300 cm" /></div>

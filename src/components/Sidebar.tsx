@@ -1,11 +1,10 @@
-'use client';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { headers } from 'next/headers';
 import {
   LayoutDashboard, Package, FileText, ShoppingBag,
   Star, Tag, Settings, Image, Cloud, LogOut, ChevronRight,
 } from 'lucide-react';
-import { getBrowserClient } from '@/lib/supabase-browser';
+import { signOut } from '@/app/auth/actions';
 
 const NAV = [
   { href: '/dashboard', label: 'Overview', icon: LayoutDashboard, exact: true },
@@ -19,16 +18,8 @@ const NAV = [
   { href: '/dashboard/cdn', label: 'CDN Manager', icon: Cloud },
 ];
 
-export function Sidebar() {
-  const pathname = usePathname();
-  const router = useRouter();
-
-  async function signOut() {
-    const supabase = getBrowserClient();
-    await supabase.auth.signOut();
-    router.push('/login');
-    router.refresh();
-  }
+export async function Sidebar() {
+  const pathname = (await headers()).get('x-pathname') ?? '/dashboard';
 
   return (
     <aside style={{
@@ -45,7 +36,7 @@ export function Sidebar() {
         {NAV.map(({ href, label, icon: Icon, exact }) => {
           const active = exact ? pathname === href : pathname.startsWith(href);
           return (
-            <Link key={href} href={href} style={{
+            <Link key={href} href={href} prefetch={true} style={{
               display: 'flex', alignItems: 'center', gap: 10, padding: '10px 24px',
               fontSize: 13, textDecoration: 'none', transition: 'color 0.15s',
               color: active ? '#fff' : 'rgba(255,255,255,0.42)',
@@ -58,15 +49,17 @@ export function Sidebar() {
           );
         })}
       </nav>
-      <button onClick={signOut} style={{
-        display: 'flex', alignItems: 'center', gap: 10, padding: '14px 24px',
-        fontSize: 13, color: 'rgba(255,255,255,0.32)',
-        background: 'none', border: 'none', borderTop: '1px solid rgba(255,255,255,0.06)',
-        cursor: 'pointer', width: '100%', textAlign: 'left',
-      }}>
-        <LogOut size={13} />
-        Sign out
-      </button>
+      <form action={signOut}>
+        <button type="submit" style={{
+          display: 'flex', alignItems: 'center', gap: 10, padding: '14px 24px',
+          fontSize: 13, color: 'rgba(255,255,255,0.32)',
+          background: 'none', border: 'none', borderTop: '1px solid rgba(255,255,255,0.06)',
+          cursor: 'pointer', width: '100%', textAlign: 'left',
+        }}>
+          <LogOut size={13} />
+          Sign out
+        </button>
+      </form>
     </aside>
   );
 }

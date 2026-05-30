@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidateTag } from 'next/cache';
 import { adminClient } from '@/lib/supabase-admin';
 import type { StorageFile } from '@/app/dashboard/cdn/types';
 
@@ -50,6 +51,9 @@ export async function POST(req: NextRequest) {
       size: compressed.length,
       inUse: false,
     };
+
+    revalidateTag('media');
+    revalidateTag('cdn');
 
     return NextResponse.json(result);
   } catch (err) {

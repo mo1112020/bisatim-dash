@@ -1,44 +1,28 @@
-'use client';
-import { useEffect, useState } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import Link from 'next/link';
+import { adminClient } from '@/lib/supabase-admin';
+import { notFound } from 'next/navigation';
 import { PageHeader } from '@/components/PageHeader';
 import { ProductFields } from '../ProductFields';
 import { updateProduct, deleteProduct } from '../actions';
+import { listMediaFiles } from '@/lib/media-files';
+import { DeleteButton } from '@/components/DeleteButton';
 import type { Product } from '@/lib/types';
-import { getBrowserClient } from '@/lib/supabase-browser';
 
-export default function EditProductPage() {
-  const { id } = useParams<{ id: string }>();
-  const [product, setProduct] = useState<Product | null>(null);
-  const [error, setError] = useState('');
-  const [saving, setSaving] = useState(false);
-  const router = useRouter();
-
-  useEffect(() => {
-    getBrowserClient().from('products').select('*').eq('id', id).single()
-      .then(({ data }) => setProduct(data));
-  }, [id]);
-
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setSaving(true);
-    setError('');
-    try {
-      await updateProduct(id, new FormData(e.currentTarget));
-      router.push('/dashboard/products');
-    } catch (err) {
-      setError(String(err));
-      setSaving(false);
-    }
-  }
-
-  async function handleDelete() {
-    if (!confirm('Delete this product? This cannot be undone.')) return;
-    await deleteProduct(id);
-    router.push('/dashboard/products');
-  }
-
-  if (!product) return <p style={{ padding: 40, color: 'var(--dash-muted)', fontSize: 13 }}>Loading…</p>;
+export default async function EditProductPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ error?: string }>;
+}) {
+  const { id } = await params;
+  const { error } = await searchParams;
+  const [{ data }, mediaFiles] = await Promise.all([
+    adminClient.from('products').select('*').eq('id', id).single(),
+    listMediaFiles(),
+  ]);
+  if (!data) notFound();
+  const product = data as Product;
 
   return (
     <div>
@@ -46,16 +30,14 @@ export default function EditProductPage() {
         title="Edit Product"
         subtitle={product.name}
         breadcrumb={[{ label: 'Products', href: '/dashboard/products' }]}
-        action={<button onClick={handleDelete} className="btn btn-danger">Delete</button>}
+        action={<DeleteButton action={deleteProduct.bind(null, id)} confirm="Delete this product? This cannot be undone." label="Delete" />}
       />
-      <form onSubmit={handleSubmit} className="dash-form-panel" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-        <ProductFields defaults={product as unknown as Record<string, unknown>} />
+      <form action={updateProduct.bind(null, id)} className="dash-form-panel" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <ProductFields defaults={product as unknown as Record<string, unknown>} mediaFiles={mediaFiles} />
         {error && <p style={{ fontSize: 12, color: '#dc2626' }}>{error}</p>}
         <div style={{ display: 'flex', gap: 12, paddingTop: 8 }}>
-          <button type="submit" className="btn btn-primary" disabled={saving}>
-            {saving ? 'Saving…' : 'Save changes'}
-          </button>
-          <a href="/dashboard/products" className="btn btn-secondary">Cancel</a>
+          <button type="submit" className="btn btn-primary">Save changes</button>
+          <Link href="/dashboard/products" className="btn btn-secondary">Cancel</Link>
         </div>
       </form>
     </div>

@@ -8,6 +8,10 @@ const config: NextConfig = {
   },
   serverExternalPackages: ['sharp'],
   experimental: {
+    staleTimes: {
+      dynamic: 300,
+      static: 300,
+    },
     serverActions: {
       bodySizeLimit: '50mb',
     },

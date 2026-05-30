@@ -1,3 +1,4 @@
+import { unstable_cache } from 'next/cache';
 import { adminClient } from '@/lib/supabase-admin';
 import type { StorageFile } from './types';
 
@@ -30,7 +31,7 @@ async function getUsedUrls(): Promise<Set<string>> {
   return used;
 }
 
-export async function loadCdnData(): Promise<StorageFile[]> {
+async function fetchCdnData(): Promise<StorageFile[]> {
   try {
     const [listResult, usedUrls] = await Promise.all([
       adminClient.storage.from(BUCKET).list('', { limit: 500 }),
@@ -55,3 +56,8 @@ export async function loadCdnData(): Promise<StorageFile[]> {
     return [];
   }
 }
+
+export const loadCdnData = unstable_cache(fetchCdnData, ['cdn-data'], {
+  revalidate: 60,
+  tags: ['cdn', 'media'],
+});

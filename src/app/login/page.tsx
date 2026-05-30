@@ -1,29 +1,11 @@
-'use client';
-import { useState } from 'react';
-import { getBrowserClient } from '@/lib/supabase-browser';
-import { useRouter } from 'next/navigation';
+import { login } from '@/app/auth/actions';
 
-export default function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  const router = useRouter();
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
-    const supabase = getBrowserClient();
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) {
-      setError(error.message);
-      setLoading(false);
-    } else {
-      router.push('/dashboard');
-      router.refresh();
-    }
-  }
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>;
+}) {
+  const { error } = await searchParams;
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--dash-bg)' }}>
@@ -32,18 +14,18 @@ export default function LoginPage() {
           <h1 style={{ fontSize: 22, fontWeight: 300, letterSpacing: '-0.02em', color: 'var(--dash-black)' }}>Bisatim</h1>
           <p style={{ marginTop: 4, fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.2em', color: 'var(--dash-muted)' }}>Dashboard</p>
         </div>
-        <form onSubmit={handleSubmit} style={{ padding: 32, background: 'var(--dash-surface)', border: '1px solid var(--dash-border)' }}>
+        <form action={login} className="dash-form-panel" style={{ padding: 32 }}>
           <div style={{ marginBottom: 20 }}>
             <label>Email</label>
-            <input type="email" value={email} onChange={e => setEmail(e.target.value)} required autoFocus />
+            <input type="email" name="email" required autoFocus />
           </div>
           <div style={{ marginBottom: 24 }}>
             <label>Password</label>
-            <input type="password" value={password} onChange={e => setPassword(e.target.value)} required />
+            <input type="password" name="password" required />
           </div>
           {error && <p style={{ marginBottom: 16, fontSize: 12, color: '#dc2626' }}>{error}</p>}
-          <button type="submit" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }} disabled={loading}>
-            {loading ? 'Signing in…' : 'Sign in'}
+          <button type="submit" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
+            Sign in
           </button>
         </form>
       </div>
